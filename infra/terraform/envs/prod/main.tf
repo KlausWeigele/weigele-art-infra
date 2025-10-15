@@ -19,6 +19,7 @@ resource "aws_acm_certificate" "cert" {
 }
 
 resource "aws_route53_record" "cert_validation" {
+  allow_overwrite = true
   for_each = {
     for dvo in aws_acm_certificate.cert.domain_validation_options :
     dvo.domain_name => {
@@ -131,6 +132,12 @@ resource "aws_cloudfront_distribution" "cdn" {
     cached_methods             = ["GET", "HEAD"]
     compress                   = true
     response_headers_policy_id = aws_cloudfront_response_headers_policy.security.id
+    forwarded_values {
+      query_string = false
+      cookies {
+        forward = "none"
+      }
+    }
 
     function_association {
       event_type   = "viewer-request"

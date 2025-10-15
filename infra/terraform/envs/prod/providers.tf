@@ -6,7 +6,7 @@ terraform {
       version = "~> 5.60"
     }
   }
-  backend "s3" {}
+  # Backend configuration resides in backend.tf (copied from backend.tf.sample during deployment).
 }
 
 provider "aws" {

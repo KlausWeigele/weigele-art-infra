@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::<ACCOUNT_ID>:role/github-oidc-deploy
+          role-to-assume: arn:aws:iam::093205941484:role/github-oidc-deploy
           aws-region: eu-central-1
       - name: Upload assets (immutable)
         run: |

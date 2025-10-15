@@ -2,9 +2,9 @@
 
 ## Voraussetzungen
 - Route 53 Hosted Zone für `weigele.art` existiert und wird _nicht_ von Terraform verwaltet (Nameserver zeigen bereits auf AWS).
-- GitHub → AWS via OIDC Rollen (Platzhalter `<ACCOUNT_ID>` im Repo beibehalten und später ersetzen):
-  - `arn:aws:iam::<ACCOUNT_ID>:role/github-oidc-terraform`
-  - `arn:aws:iam::<ACCOUNT_ID>:role/github-oidc-deploy`
+- GitHub → AWS via OIDC Rollen:
+  - `arn:aws:iam::093205941484:role/github-oidc-terraform`
+  - `arn:aws:iam::093205941484:role/github-oidc-deploy`
 - Lokal benötigte Tools: `aws` CLI, `terraform`, `jq`, `curl`.
 
 ## Terraform Backend Bootstrap
@@ -62,6 +62,6 @@ DELETE_UNUSED_ACM=1 ./scripts/fix_leftovers.sh
 ```
 
 ## Hinweise
-- In den GitHub Workflows `<ACCOUNT_ID>` durch die eigene AWS Account-ID ersetzen.
+- In den GitHub Workflows ist die AWS Account-ID `093205941484` bereits eingetragen (falls sich die Ziel-ID ändert, bitte anpassen).
 - Deploy-Skript cached `index.html` kurz (60 s) und Assets 1 Jahr (`immutable`) und triggert eine CloudFront Invalidation.
 - Budget-/Alarmierung optional separat konfigurieren (z. B. AWS Budgets, CloudWatch Alarme).

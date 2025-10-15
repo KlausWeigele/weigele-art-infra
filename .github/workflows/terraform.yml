@@ -20,7 +20,7 @@ jobs:
       - uses: hashicorp/setup-terraform@v3
       - uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::<ACCOUNT_ID>:role/github-oidc-terraform
+          role-to-assume: arn:aws:iam::093205941484:role/github-oidc-terraform
           aws-region: ${{ env.AWS_REGION }}
       - name: Backend file
         run: cp infra/terraform/envs/prod/backend.tf.sample infra/terraform/envs/prod/backend.tf
