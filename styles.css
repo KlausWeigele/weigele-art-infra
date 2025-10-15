@@ -1,0 +1,52 @@
+:root {
+  --bg-green: #1a2d13;
+  --lane-border: #111;
+  --lane-line: #f5fbff;
+  --hud-bg: #3a2c4c;
+  --hud-text: #ffefde;
+  --hud-shadow: #1b1425;
+  --font-primary: 'Press Start 2P', monospace;
+}
+
+@font-face {
+  font-family: 'Press Start 2P';
+  src: local('Press Start 2P');
+}
+
+body {
+  background: radial-gradient(circle at top, #202020 0%, #0a0a0a 70%);
+  color: var(--hud-text);
+  font-family: var(--font-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin: 24px;
+}
+
+#hud {
+  display: flex;
+  gap: 24px;
+  padding: 12px 20px;
+  background: var(--hud-bg);
+  border: 4px solid var(--hud-shadow);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 14px;
+}
+
+.hud-item {
+  min-width: 120px;
+}
+
+#game {
+  border: 12px solid #111;
+  image-rendering: pixelated;
+  background: var(--bg-green);
+}
+
+#controls {
+  font-size: 12px;
+  text-align: center;
+  color: #ccc;
+}

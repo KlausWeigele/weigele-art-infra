@@ -1,0 +1,11 @@
+name: CI
+
+on: [pull_request, push]
+
+jobs:
+  static-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Basic link check
+        run: test -f game_cars/index.html && test -f game_cars/main.js && test -f game_cars/styles.css

@@ -1,0 +1,34 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches: [main]
+    paths: ["game_cars/**"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      DOMAIN: weigele.art
+      BUCKET: weigele-art-site
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::<ACCOUNT_ID>:role/github-oidc-deploy
+          aws-region: eu-central-1
+      - name: Upload assets (immutable)
+        run: |
+          aws s3 sync game_cars s3://$BUCKET --exclude "index.html" \
+            --cache-control "max-age=31536000, immutable" --delete
+      - name: Upload index.html (short cache)
+        run: |
+          aws s3 cp game_cars/index.html s3://$BUCKET/index.html \
+            --cache-control "max-age=60, must-revalidate" --metadata-directive REPLACE
+      - name: Invalidate CloudFront (by domain)
+        run: |
+          CF_ID=$(aws cloudfront list-distributions --query "DistributionList.Items[?contains(Aliases.Items, '$DOMAIN')].Id | [0]" --output text)
+          aws cloudfront create-invalidation --distribution-id "$CF_ID" --paths "/*"

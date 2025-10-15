@@ -1,0 +1,37 @@
+name: Terraform
+
+on:
+  pull_request:
+    paths: ["infra/terraform/**"]
+  push:
+    branches: [main]
+    paths: ["infra/terraform/**"]
+
+jobs:
+  tf:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    env:
+      AWS_REGION: eu-central-1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::<ACCOUNT_ID>:role/github-oidc-terraform
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Backend file
+        run: cp infra/terraform/envs/prod/backend.tf.sample infra/terraform/envs/prod/backend.tf
+      - name: Terraform Init
+        working-directory: infra/terraform/envs/prod
+        run: terraform init -input=false
+      - name: Terraform Plan
+        if: github.event_name == 'pull_request'
+        working-directory: infra/terraform/envs/prod
+        run: terraform plan -input=false -no-color -var='domain=weigele.art' -var='bucket_name=weigele-art-site'
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        working-directory: infra/terraform/envs/prod
+        run: terraform apply -auto-approve -var='domain=weigele.art' -var='bucket_name=weigele-art-site'
